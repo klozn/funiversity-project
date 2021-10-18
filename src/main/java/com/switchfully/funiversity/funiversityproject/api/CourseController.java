@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.websocket.server.PathParam;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,8 +32,8 @@ public class CourseController {
         return service.getAllCourses();
     }
 
-    @PostMapping(consumes = "application/json", produces = "application/json")
-    public CourseDto create(@RequestBody CreateCourseDto courseDto, @PathParam("professorId") String professorId) {
+    @PostMapping(consumes = "application/json", produces = "application/json", params = "professorId")
+    public CourseDto create(@RequestBody CreateCourseDto courseDto, @RequestParam String professorId) {
         logger.info("Creating new course");
         try {
             return service.createNewCourse(courseDto, professorId);
@@ -44,8 +43,8 @@ public class CourseController {
         }
     }
 
-    @GetMapping(produces = "application/json")
-    public List<CourseDto> getAllFilteredByStudyPoints(@PathParam("studyPoints") int studyPoints) {
+    @GetMapping(produces = "application/json", params = "studyPoints")
+    public List<CourseDto> getAllFilteredByStudyPoints(@RequestParam int studyPoints) {
         return service.getAllCourses().stream()
                 .filter(courseDto -> courseDto.getAmountOfStudyPoints() == studyPoints)
                 .collect(Collectors.toList());
