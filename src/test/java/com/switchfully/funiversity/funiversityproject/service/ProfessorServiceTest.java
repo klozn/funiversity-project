@@ -35,6 +35,5 @@ class ProfessorServiceTest {
         assertThat(testProfessor.getId()).isEqualTo(professorDto.getId());
         assertThat(testProfessor.getFirstname()).isEqualTo(professorDto.getFirstname());
         assertThat(testProfessor.getLastname()).isEqualTo(professorDto.getLastname());
-        assertThat(testProfessor.getCourses()).containsExactlyElementsOf(professorDto.getCourses());
     }
 }
