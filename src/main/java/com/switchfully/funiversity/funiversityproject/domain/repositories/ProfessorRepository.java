@@ -23,4 +23,8 @@ public class ProfessorRepository {
         return professorMap.values();
     }
 
+    public void remove(String id) {
+        professorMap.remove(id);
+    }
+
 }

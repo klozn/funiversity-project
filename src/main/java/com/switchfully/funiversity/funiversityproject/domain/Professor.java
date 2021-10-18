@@ -5,42 +5,44 @@ import java.util.*;
 public class Professor {
 
     private final String id;
-    private Set<String> titles = new HashSet<>();
-    private String name;
-    private final Set<Course> courses = new HashSet<>();
+    private String firstname;
+    private String lastname;
+    private Set<Course> courses;
 
-    public Professor(String name, Set<String> titles) {
+    public Professor(String firstname, String lastname) {
         id = UUID.randomUUID().toString();
-        this.name = name;
-        this.titles = titles;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        courses = new HashSet<>();
     }
 
     public String getId() {
         return id;
     }
 
-    public Set<String> getTitles() {
-        return titles;
+
+    public String getFirstname() {
+        return firstname;
     }
 
-    public String getName() {
-        return name;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public Set<Course> getCourses() {
         return courses;
     }
 
-    public void addTitle(String title) {
-        titles.add(title);
-    }
-
-    public void removeTitle(String title) {
-        titles.remove(title);
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
     }
 
     public void addCourse(Course course) {

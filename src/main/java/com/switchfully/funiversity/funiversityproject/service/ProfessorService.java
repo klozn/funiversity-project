@@ -1,21 +1,28 @@
 package com.switchfully.funiversity.funiversityproject.service;
 
 import com.switchfully.funiversity.funiversityproject.api.dto.CreateProfessorDto;
+import com.switchfully.funiversity.funiversityproject.api.dto.DtoMapper;
 import com.switchfully.funiversity.funiversityproject.api.dto.ProfessorDto;
+import com.switchfully.funiversity.funiversityproject.api.dto.UpdateProfessorDto;
 import com.switchfully.funiversity.funiversityproject.domain.Professor;
+import com.switchfully.funiversity.funiversityproject.domain.exceptions.ProfessorNotFoundException;
 import com.switchfully.funiversity.funiversityproject.domain.repositories.ProfessorRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.switchfully.funiversity.funiversityproject.api.dto.DtoMapper.toDto;
 
 @Service
 public class ProfessorService {
 
     private final ProfessorRepository repository;
+    private final Logger logger = LoggerFactory.getLogger(ProfessorService.class);
 
     @Autowired
     public ProfessorService(ProfessorRepository repository) {
@@ -23,28 +30,42 @@ public class ProfessorService {
     }
 
     public List<ProfessorDto> getAllProfessors() {
-        var professors = new ArrayList<>(repository.getAllProfessors());
-        return professors.stream()
-                .map(this::toDto)
-                .sorted(Comparator.comparing(ProfessorDto::getName))
+        return repository.getAllProfessors().stream()
+                .map(DtoMapper::toDto)
+                .sorted(Comparator.comparing(ProfessorDto::getLastname).thenComparing(ProfessorDto::getFirstname))
                 .collect(Collectors.toList());
     }
 
     public ProfessorDto getProfessorById(String id) {
-        return toDto(repository.getProfessorById(id));
+        Professor professor = returnProfessorIfExistsElseThrowException(id);
+        return toDto(professor);
     }
 
-    public ProfessorDto save(CreateProfessorDto createProfessorDto) {
-        Professor professor = new Professor(createProfessorDto.getName(), createProfessorDto.getTitles());
+    public ProfessorDto createProfessor(CreateProfessorDto ProfessorDto) {
+        Professor professor = new Professor(ProfessorDto.getFirstname(), ProfessorDto.getLastname());
         repository.save(professor);
         return toDto(professor);
     }
 
-    private ProfessorDto toDto(Professor professor) {
-        return new ProfessorDto().setId(professor.getId())
-                .setName(professor.getName())
-                .setTitles(professor.getTitles())
-                .setCourses(professor.getCourses());
+    public void removeProfessor(String id) {
+        Professor professor = returnProfessorIfExistsElseThrowException(id);
+        repository.remove(professor.getId());
     }
 
+    public ProfessorDto updateProfessor(String id, UpdateProfessorDto professorDto) {
+        Professor professorToUpdate = returnProfessorIfExistsElseThrowException(id);
+        professorToUpdate.setFirstname(professorDto.getFirstname());
+        professorToUpdate.setLastname(professorDto.getLastname());
+        repository.save(professorToUpdate);
+        return toDto(professorToUpdate);
+    }
+
+    protected Professor returnProfessorIfExistsElseThrowException(String id) {
+        Professor professor = repository.getProfessorById(id);
+        if (professor == null) {
+            logger.warn("Tried to query professor with id:" + id + ", but does not exist in database");
+            throw new ProfessorNotFoundException("No professor found with id:" + id);
+        }
+        return professor;
+    }
 }

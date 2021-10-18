@@ -1,26 +1,15 @@
 package com.switchfully.funiversity.funiversityproject.api.dto;
 
-import java.util.Set;
-
 public class CreateProfessorDto {
-    private String name;
-    private Set<String> titles;
+    private String firstname;
+    private String lastname;
 
-    public CreateProfessorDto setName(String name) {
-        this.name = name;
-        return this;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public String getName() {
-        return name;
+    public String getLastname() {
+        return lastname;
     }
 
-    public Set<String> getTitles() {
-        return titles;
-    }
-
-    public CreateProfessorDto addTitle(String title) {
-        titles.add(title);
-        return this;
-    }
 }

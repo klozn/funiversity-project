@@ -1,24 +1,14 @@
 package com.switchfully.funiversity.funiversityproject.api.dto;
 
-public class ProfessorDto {
-    private String id;
+public class UpdateProfessorDto {
     private String firstname;
     private String lastname;
-
-    public String getId() {
-        return id;
-    }
-
-    public ProfessorDto setId(String id) {
-        this.id = id;
-        return this;
-    }
 
     public String getFirstname() {
         return firstname;
     }
 
-    public ProfessorDto setFirstname(String firstname) {
+    public UpdateProfessorDto setFirstname(String firstname) {
         this.firstname = firstname;
         return this;
     }
@@ -27,8 +17,9 @@ public class ProfessorDto {
         return lastname;
     }
 
-    public ProfessorDto setLastname(String lastname) {
+    public UpdateProfessorDto setLastname(String lastname) {
         this.lastname = lastname;
         return this;
     }
+
 }
