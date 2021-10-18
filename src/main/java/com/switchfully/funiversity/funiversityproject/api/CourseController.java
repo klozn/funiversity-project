@@ -33,18 +33,20 @@ public class CourseController {
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json", params = "professorId")
+    @ResponseStatus(HttpStatus.CREATED)
     public CourseDto create(@RequestBody CreateCourseDto courseDto, @RequestParam String professorId) {
         logger.info("Creating new course");
         try {
             return service.createNewCourse(courseDto, professorId);
         } catch (ProfessorNotFoundException e) {
             logger.warn("Tried to create a course for professor with id:" + professorId + ", but professor not found.");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @GetMapping(produces = "application/json", params = "studyPoints")
     public List<CourseDto> getAllFilteredByStudyPoints(@RequestParam int studyPoints) {
+        logger.info("Querying all courses with " + studyPoints + " study points.");
         return service.getAllCourses().stream()
                 .filter(courseDto -> courseDto.getAmountOfStudyPoints() == studyPoints)
                 .collect(Collectors.toList());

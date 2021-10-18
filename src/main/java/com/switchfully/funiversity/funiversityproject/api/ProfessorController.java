@@ -64,6 +64,6 @@ public class ProfessorController {
     @ExceptionHandler(ProfessorNotFoundException.class)
     public void handleProfessorNotFoundException(ProfessorNotFoundException exception,
                                                  HttpServletResponse response) throws IOException {
-        response.sendError(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+        response.sendError(HttpStatus.NOT_FOUND.value(), exception.getMessage());
     }
 }
