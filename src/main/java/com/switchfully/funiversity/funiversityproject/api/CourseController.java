@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("**/courses")
+@RequestMapping("/courses")
 public class CourseController {
 
     private final Logger logger = LoggerFactory.getLogger(CourseController.class);

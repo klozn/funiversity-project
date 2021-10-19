@@ -1,14 +1,9 @@
 package com.switchfully.funiversity.funiversityproject.service;
 
-import com.switchfully.funiversity.funiversityproject.api.dto.CreateProfessorDto;
-import com.switchfully.funiversity.funiversityproject.api.dto.DtoMapper;
-import com.switchfully.funiversity.funiversityproject.api.dto.ProfessorDto;
-import com.switchfully.funiversity.funiversityproject.api.dto.UpdateProfessorDto;
+import com.switchfully.funiversity.funiversityproject.api.dto.*;
 import com.switchfully.funiversity.funiversityproject.domain.Professor;
 import com.switchfully.funiversity.funiversityproject.domain.exceptions.ProfessorNotFoundException;
 import com.switchfully.funiversity.funiversityproject.domain.repositories.ProfessorRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +17,6 @@ import static com.switchfully.funiversity.funiversityproject.api.dto.DtoMapper.t
 public class ProfessorService {
 
     private final ProfessorRepository repository;
-    private final Logger logger = LoggerFactory.getLogger(ProfessorService.class);
 
     @Autowired
     public ProfessorService(ProfessorRepository repository) {
@@ -58,6 +52,14 @@ public class ProfessorService {
         professorToUpdate.setLastname(professorDto.getLastname());
         repository.save(professorToUpdate);
         return toDto(professorToUpdate);
+    }
+
+    public List<CourseDto> getCoursesByProfessorId(String id) {
+        Professor professor = returnProfessorIfExistsElseThrowException(id);
+        return professor.getCourses().stream()
+                .map(DtoMapper::toDto)
+                .sorted(Comparator.comparing(CourseDto::getName))
+                .collect(Collectors.toList());
     }
 
     protected Professor returnProfessorIfExistsElseThrowException(String id) {

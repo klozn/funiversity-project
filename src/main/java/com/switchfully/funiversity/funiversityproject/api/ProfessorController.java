@@ -1,9 +1,9 @@
 package com.switchfully.funiversity.funiversityproject.api;
 
+import com.switchfully.funiversity.funiversityproject.api.dto.CourseDto;
 import com.switchfully.funiversity.funiversityproject.api.dto.CreateProfessorDto;
 import com.switchfully.funiversity.funiversityproject.api.dto.ProfessorDto;
 import com.switchfully.funiversity.funiversityproject.api.dto.UpdateProfessorDto;
-import com.switchfully.funiversity.funiversityproject.domain.exceptions.ProfessorNotFoundException;
 import com.switchfully.funiversity.funiversityproject.service.ProfessorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -60,5 +58,10 @@ public class ProfessorController {
         return updated;
     }
 
+    @GetMapping(path = "/{id}/courses", produces = "application/json")
+    public List<CourseDto> getCoursesByProfessorId(@PathVariable String id) {
+        logger.info("Querying courses of professor with id:" + id);
+        return service.getCoursesByProfessorId(id);
+    }
 
 }
