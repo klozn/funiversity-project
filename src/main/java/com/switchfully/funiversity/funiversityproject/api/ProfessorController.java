@@ -41,7 +41,7 @@ public class ProfessorController {
     @PostMapping(consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public ProfessorDto create(@RequestBody CreateProfessorDto professorDto) {
-        logger.info("New professor created");
+        logger.info("Creating new professor");
         return service.createProfessor(professorDto);
     }
 

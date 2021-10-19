@@ -11,21 +11,23 @@ public class Professor {
 
     public Professor(String firstname, String lastname) {
         id = UUID.randomUUID().toString();
-        this.firstname = firstname;
-        this.lastname = lastname;
-        courses = new HashSet<>();
+        setFirstname(firstname);
+        setLastname(lastname);
+        setCourses(new HashSet<>());
     }
 
     public String getId() {
         return id;
     }
 
-
     public String getFirstname() {
         return firstname;
     }
 
     public void setFirstname(String firstname) {
+        if (firstname == null || firstname.isBlank()) {
+            throw new IllegalArgumentException("Firstname for professor can't be null or blank.");
+        }
         this.firstname = firstname;
     }
 
@@ -34,6 +36,9 @@ public class Professor {
     }
 
     public void setLastname(String lastname) {
+        if (lastname == null || lastname.isBlank()) {
+            throw new IllegalArgumentException("Lastname for professor can't be null or blank.");
+        }
         this.lastname = lastname;
     }
 

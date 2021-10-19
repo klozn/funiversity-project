@@ -27,4 +27,11 @@ public class ControllerAdvisor {
         logger.warn("Course not found. Message = " + exception.getMessage());
         response.sendError(HttpStatus.NOT_FOUND.value(), exception.getMessage());
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public void handleIllegalArgumentException(IllegalArgumentException exception,
+                                               HttpServletResponse response) throws IOException {
+        logger.warn("Illegal argument. Message = " + exception.getMessage());
+        response.sendError(HttpStatus.BAD_REQUEST.value(), exception.getMessage());
+    }
 }
