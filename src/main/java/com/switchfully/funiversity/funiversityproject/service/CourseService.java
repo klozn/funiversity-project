@@ -37,8 +37,7 @@ public class CourseService {
 
     public CourseDto createNewCourse(CreateCourseDto courseDto, String professorId) {
         Professor professor = professorService.returnProfessorIfExistsElseThrowException(professorId);
-        Course course = new Course(courseDto.getName(), courseDto.getAmountOfStudyPoints());
-        course.setProfessor(professor);
+        Course course = new Course(courseDto.getName(), courseDto.getAmountOfStudyPoints(), professor);
         courseRepository.save(course);
         return toDto(course);
     }

@@ -9,10 +9,11 @@ public class Course {
     private int amountOfStudyPoints;
     private Professor professor;
 
-    public Course(String name, int amountOfStudyPoints) {
+    public Course(String name, int amountOfStudyPoints, Professor professor) {
         id = UUID.randomUUID().toString();
-        this.name = name;
-        this.amountOfStudyPoints = amountOfStudyPoints;
+        setName(name);
+        setAmountOfStudyPoints(amountOfStudyPoints);
+        setProfessor(professor);
     }
 
     public String getId() {
