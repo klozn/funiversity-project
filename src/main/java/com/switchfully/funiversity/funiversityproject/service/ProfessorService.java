@@ -63,7 +63,6 @@ public class ProfessorService {
     protected Professor returnProfessorIfExistsElseThrowException(String id) {
         Professor professor = repository.getProfessorById(id);
         if (professor == null) {
-            logger.warn("Tried to query professor with id:" + id + ", but does not exist in database");
             throw new ProfessorNotFoundException("No professor found with id:" + id);
         }
         return professor;

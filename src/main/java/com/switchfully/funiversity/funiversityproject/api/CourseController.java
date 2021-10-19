@@ -2,20 +2,18 @@ package com.switchfully.funiversity.funiversityproject.api;
 
 import com.switchfully.funiversity.funiversityproject.api.dto.CourseDto;
 import com.switchfully.funiversity.funiversityproject.api.dto.CreateCourseDto;
-import com.switchfully.funiversity.funiversityproject.domain.exceptions.ProfessorNotFoundException;
 import com.switchfully.funiversity.funiversityproject.service.CourseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/courses")
+@RequestMapping("**/courses")
 public class CourseController {
 
     private final Logger logger = LoggerFactory.getLogger(CourseController.class);
@@ -36,12 +34,7 @@ public class CourseController {
     @ResponseStatus(HttpStatus.CREATED)
     public CourseDto create(@RequestBody CreateCourseDto courseDto, @RequestParam String professorId) {
         logger.info("Creating new course");
-        try {
-            return service.createNewCourse(courseDto, professorId);
-        } catch (ProfessorNotFoundException e) {
-            logger.warn("Tried to create a course for professor with id:" + professorId + ", but professor not found.");
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
+        return service.createNewCourse(courseDto, professorId);
     }
 
     @GetMapping(produces = "application/json", params = "studyPoints")
@@ -50,5 +43,11 @@ public class CourseController {
         return service.getAllCourses().stream()
                 .filter(courseDto -> courseDto.getAmountOfStudyPoints() == studyPoints)
                 .collect(Collectors.toList());
+    }
+
+    @PatchMapping(path = "/{courseId}", produces = "application/json")
+    public CourseDto changeProfessor(@PathVariable String courseId, @RequestParam String professorId) {
+        logger.info("Changing professor of course with id:" + courseId + " to professor with id:" + professorId);
+        return service.changeProfessor(courseId, professorId);
     }
 }

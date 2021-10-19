@@ -5,6 +5,7 @@ import com.switchfully.funiversity.funiversityproject.api.dto.CreateCourseDto;
 import com.switchfully.funiversity.funiversityproject.api.dto.DtoMapper;
 import com.switchfully.funiversity.funiversityproject.domain.Course;
 import com.switchfully.funiversity.funiversityproject.domain.Professor;
+import com.switchfully.funiversity.funiversityproject.domain.exceptions.CourseNotFoundException;
 import com.switchfully.funiversity.funiversityproject.domain.repositories.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.switchfully.funiversity.funiversityproject.api.dto.DtoMapper.toDto;
 
 @Service
 public class CourseService {
@@ -36,6 +39,21 @@ public class CourseService {
         Professor professor = professorService.returnProfessorIfExistsElseThrowException(professorId);
         Course course = new Course(courseDto.getName(), courseDto.getAmountOfStudyPoints(), professor);
         courseRepository.save(course);
-        return DtoMapper.toDto(course);
+        return toDto(course);
+    }
+
+    public CourseDto changeProfessor(String courseId, String professorId) {
+        Professor professor = professorService.returnProfessorIfExistsElseThrowException(professorId);
+        Course course = returnCourseIfExistsElseThrowException(courseId);
+        course.setProfessor(professor);
+        return toDto(course);
+    }
+
+    private Course returnCourseIfExistsElseThrowException(String id) {
+        Course course = courseRepository.getCourseById(id);
+        if (course == null) {
+            throw new CourseNotFoundException("No course found with id:" + id);
+        }
+        return course;
     }
 }

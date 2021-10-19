@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -61,9 +60,5 @@ public class ProfessorController {
         return updated;
     }
 
-    @ExceptionHandler(ProfessorNotFoundException.class)
-    public void handleProfessorNotFoundException(ProfessorNotFoundException exception,
-                                                 HttpServletResponse response) throws IOException {
-        response.sendError(HttpStatus.NOT_FOUND.value(), exception.getMessage());
-    }
+
 }
